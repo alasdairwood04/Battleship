@@ -1,7 +1,11 @@
 # Battleship Game
-### Project Overview
+
+## Project Overview
+
 This is a JavaScript implementation of the classic Battleship game, designed to be played in a web browser. The project follows object-oriented programming principles with clean separation of game logic from the user interface.
+
 ### Current State
+
 The project is currently in development with the core game logic implemented. The codebase includes:
 
 - Ship class for creating and managing ships
@@ -10,6 +14,7 @@ The project is currently in development with the core game logic implemented. Th
 - Test suites for all components
 
 Implemented Features
+
 - Ship creation with hit tracking and sinking status
 - Gameboard with ship placement and attack tracking
 - Support for both horizontal and vertical ship placement
@@ -18,11 +23,13 @@ Implemented Features
 - Random ship placement for computer players
 
 In Progress
-- let user adn computer to select starting positions logic
+
+- let user and computer to select starting positions logic
 - User interface components
 - Game controller to manage turns and game state
 - Win/loss conditions display
 - Ship placement interface for human players
+
 ### Project Structure
 
 ```
@@ -43,28 +50,36 @@ Battleship/
 ├── webpack.prod.js         # Webpack production configuration
 └── package.json            # Project dependencies and scripts
 ```
+
 ### Key Classes
+
 Ship
 
 - Properties: name, length, hits, sunk status
 - Methods: hit(), isSunk(), getName(), getLength(), getHits()
 
 Gameboard
+
 - Properties: ships array, board grid, hit/miss logs
 - Methods: placeShip(), receiveAttack(), areAllShipsSunk()
 
 Player
+
 - Base class for all player types
 - Methods: attack(), getName(), getGameboard()
 
 HumanPlayer
+
 - Extends Player
 - Methods: chooseMove(x, y) for human input
 
 ComputerPlayer
+
 - Extends Player
 - Methods: generateAllMoves(), chooseMove(), placeShipsRandomly()
+
 ### How to Run
+
 Development
 
 ```npm run dev```
@@ -73,19 +88,20 @@ Production Build
 
 ```npm run build```
 
-
 Run Tests
 
 ```npm test```
 
-
 Next Steps
+
 1. Complete the user interface components
 2. Implement game controller to manage turns
 3. Add drag-and-drop ship placement for human players
 4. Add game reset functionality
 5. Improve computer AI with targeting logic after hits
+
 ### Technologies Used
+
 - JavaScript (ES6+)
 - Jest for testing
 - Webpack for bundling
