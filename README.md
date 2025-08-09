@@ -11,24 +11,29 @@ The project is currently in development with the core game logic implemented. Th
 - Ship class for creating and managing ships
 - Gameboard class for handling the game board logic
 - Player classes (Human and Computer) for player interactions
-- Test suites for all components
+- GameController to manage the game state and turns
+- Comprehensive test suites for all components
 
 Implemented Features
 
 - Ship creation with hit tracking and sinking status
 - Gameboard with ship placement and attack tracking
-- Support for both horizontal and vertical ship placement
+-Support for both horizontal and vertical ship placement
 - Attack system with hit/miss recording
+- Player turn management
 - Computer player with random move selection
-- Random ship placement for computer players
+-Random ship placement for computer players
+- Win/loss detection
+- Game phase management (setup, play, game over)
+- Game reset functionality
 
 In Progress
 
-- let user and computer to select starting positions logic
 - User interface components
-- Game controller to manage turns and game state
-- Win/loss conditions display
 - Ship placement interface for human players
+- Visual representation of game boards
+- Hit/miss display
+- Game status indicators
 
 ### Project Structure
 
@@ -39,16 +44,18 @@ Battleship/
 │   │   ├── Ship.js         # Ship class definition
 │   │   ├── Gameboard.js    # Gameboard class definition
 │   │   ├── Player.js       # Player, HumanPlayer, and ComputerPlayer classes
+│   │   ├── GameController.js # Game state and turn management
 │   │   └── __tests__/      # Test files for game logic
 │   │       ├── Ship.test.js
 │   │       ├── Gameboard.test.js
-│   │       └── Player.test.js
+│   │       ├── Player.test.js
+│   │       └── GameController.test.js
 │   ├── index.js            # Main entry point
-│   └── ui/                 # UI components (to be implemented)
+│   └── ui/                 # UI components (in development)
 ├── dist/                   # Production build files
 ├── webpack.dev.js          # Webpack development configuration
 ├── webpack.prod.js         # Webpack production configuration
-└── package.json            # Project dependencies and scripts
+└── package.json            # Project dependencies and scripts```
 ```
 
 ### Key Classes
@@ -76,7 +83,13 @@ HumanPlayer
 ComputerPlayer
 
 - Extends Player
-- Methods: generateAllMoves(), chooseMove(), placeShipsRandomly()
+- Methods: generateAllMoves(), getAttackCoordinates(), attack(), placeShipsRandomly
+
+GameController
+
+- Manages game state and player turns
+- Methods: setupGame(), playTurn(), switchPlayer(), resetGame()
+- Tracks game phases (setup, play, gameOver)
 
 ### How to Run
 
@@ -94,11 +107,12 @@ Run Tests
 
 Next Steps
 
-1. Complete the user interface components
-2. Implement game controller to manage turns
+1. Implement the user interface components
+2. Create visual representation of game boards
 3. Add drag-and-drop ship placement for human players
-4. Add game reset functionality
-5. Improve computer AI with targeting logic after hits
+4. Develop visual indicators for hits, misses, and sunk ships
+5. Add sound effects and animations
+6. Improve computer AI with targeting logic after hits
 
 ### Technologies Used
 
