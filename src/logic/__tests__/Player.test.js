@@ -89,4 +89,26 @@ describe("Computer Player", () => {
         const totalShipLength = ships.reduce((sum, ship) => sum + ship.getLength(), 0);
         expect(shipCells).toBe(totalShipLength);
     });
+
+    test("should attack the opponent's gameboard", () => {
+        const player1 = new HumanPlayer("Player1");
+        const player2 = new HumanPlayer("Player2");
+        const ship = new Ship("Battleship", 4);
+        player1.placeShip(ship, [0, 0], "horizontal");
+
+        expect(player2.attack(player1.getGameboard(), [0, 0])).toBe(true);
+        expect(ship.getHits()).toBe(1);
+        expect(player2.attack(player1.getGameboard(), [1, 1])).toBe(false);
+    });
+
+    test("computer should attack the opponent's gameboard", () => {
+        const player1 = new HumanPlayer("Player1");
+        const computer = new ComputerPlayer();
+        const ship = new Ship("Battleship", 4);
+        player1.placeShip(ship, [0, 0], "horizontal");
+
+        expect(computer.attack(player1.getGameboard())).toBe(true);
+        expect(ship.getHits()).toBe(1);
+        expect(computer.attack(player1.getGameboard())).toBe(false);
+    });
 });

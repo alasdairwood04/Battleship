@@ -1,7 +1,8 @@
 import Gameboard from "./Gameboard.js";
+import Ship from "./Ship.js";
 
 
-class Player {
+export class Player {
     constructor(name, gameboard = new Gameboard()) {
         this.name = name;
         this.gameboard = gameboard;
@@ -24,17 +25,18 @@ class Player {
     }
 }
 
-class HumanPlayer extends Player {
+export class HumanPlayer extends Player {
     constructor(name, gameboard) {
         super(name, gameboard);
     }
 
-    chooseMove(x, y) {
+    getAttackCoordinates(coordinates) {
+        const [x, y] = coordinates;
         return [x, y];
     }
 }
 
-class ComputerPlayer extends Player {
+export class ComputerPlayer extends Player {
     constructor(gameboard) {
         super("Computer", gameboard);
         this.availableMoves = this.generateAllMoves();
@@ -51,13 +53,20 @@ class ComputerPlayer extends Player {
         return moves;
     }
 
-    chooseMove() {
+    getAttackCoordinates() {
         // Pick random move from available
         if (this.availableMoves.length === 0) {
             return null; // No moves left
         }
         const idx = Math.floor(Math.random() * this.availableMoves.length);
         return this.availableMoves.splice(idx, 1)[0];
+    }
+    
+
+    attack(opponentBoard, coordinates) {
+        if (coordinates) {
+            return opponentBoard.receiveAttack(coordinates);
+        }
     }
 
     placeShipsRandomly(ships) {
@@ -89,3 +98,35 @@ class ComputerPlayer extends Player {
 }
 
 module.exports = { Player, HumanPlayer, ComputerPlayer };
+
+// const player = new HumanPlayer("Player1");
+
+// const ship = new Ship("Battleship", 4);
+// player.placeShip(ship, [0, 0], "horizontal");
+
+
+// const computer = new ComputerPlayer();
+
+// computer.makeRandomAttack(player.getGameboard());
+
+// console.log(player.getGameboard().getBoard());
+
+// console.log("Hits:", player.getGameboard().getHits());
+
+// console.log("Misses:", player.getGameboard().getMisses());
+
+// const player1 = new HumanPlayer("Player1");
+// const computer = new ComputerPlayer();
+// const ship = new Ship("Battleship", 4);
+// player1.placeShip(ship, [0, 0], "horizontal");
+
+
+
+// computer.attack(player1.getGameboard());
+
+// console.log(player1.getGameboard().getBoard());
+
+
+// console.log("Hits:", player1.getGameboard().getHits());
+
+// console.log("Misses:", player1.getGameboard().getMisses());

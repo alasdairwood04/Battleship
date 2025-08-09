@@ -1,6 +1,6 @@
 import Ship from "./Ship.js";
 
-class Gameboard {
+export default class Gameboard {
     constructor(size = 10) {
         this.ships = [];
         this.board = Array.from({ length: size}, () => 
