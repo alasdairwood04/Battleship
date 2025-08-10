@@ -97,7 +97,7 @@ export class ComputerPlayer extends Player {
     }
 }
 
-module.exports = { Player, HumanPlayer, ComputerPlayer };
+// module.exports = { Player, HumanPlayer, ComputerPlayer };
 
 // const player = new HumanPlayer("Player1");
 

@@ -23,15 +23,15 @@ export default class GameController {
         return this.currentPlayer;
     }
 
-    setupGame(humanPlayer, computerPlayer, humanShipPlacements) {
+    setupGameComputer(computerPlayer) {
     // Place ships for the human player based on provided placements
-    for (const placement of humanShipPlacements) {
-        humanPlayer.placeShip(
-            placement.ship, 
-            placement.coordinates, 
-            placement.orientation
-        );
-    }
+    // for (const placement of humanShipPlacements) {
+    //     humanPlayer.placeShip(
+    //         placement.ship, 
+    //         placement.coordinates, 
+    //         placement.orientation
+    //     );
+    // }
     
     // Place ships for the computer player randomly
     const ships = [
@@ -52,15 +52,14 @@ export default class GameController {
         if (this.gamePhase !== "play") {
             throw new Error("Game is not in play phase");
         }
+        
         // Implement the logic for a player's turn
-
         if (this.isOver) {
             return {
                 success: true,
                 message: "Game over"
             }
         }
-
 
         let attackCoordinates = coordinates;
         let attackResult;
@@ -76,12 +75,10 @@ export default class GameController {
                 this.gamePhase = "gameOver";
             }
         
-
             // Switch to the next player
             if (!this.isOver) {
                 this.switchPlayer();
             }
-
             return {
                 success: true,
                 hit: attackResult,
@@ -89,7 +86,6 @@ export default class GameController {
                 message: attackResult ? 'Hit!' : 'Miss!'
             };
         }
-
 
         // Human player's turn
         if (coordinates) {
@@ -148,7 +144,7 @@ export default class GameController {
     }
 }
 
-module.exports = GameController;
+// module.exports = GameController;
 
 // // Setup players
 // const humanPlayer = new HumanPlayer("Human");

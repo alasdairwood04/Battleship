@@ -6,6 +6,35 @@
     <title>Battleship</title>
 </head>
 <body>
-    
+    <header>
+        <h1>Battleship</h1>
+    </header>
+
+    <main>
+        <div class="ship-placement-container">
+            <h2>Place Your Ships</h2>
+            <div class="ships">
+                </div>
+
+                <button id="rotate-button">Rotate Ship</button>
+                <button id="start-button" disabled>Start Game</button>
+        </div>
+
+        <div class="game-container">
+            <div class="game-board-container">
+                <h2>Your Ships</h2>
+                <div id="player-board" class="game-board"></div>
+            </div>
+            <div class="game-board-container">
+                <h2>Computer's Ships</h2>
+                <div id="computer-board" class="game-board"></div>
+            </div>
+        </div>
+
+        <div class="game-status-container">
+            <p id="game-status">Place your ships to start the game.</p>
+            <button id="reset-button">Reset Game</button>
+        </div>
+    </main>
 </body>
 </html>

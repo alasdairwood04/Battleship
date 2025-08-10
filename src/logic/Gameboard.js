@@ -21,14 +21,14 @@ export default class Gameboard {
             
             // Check if any position is already occupied
             for (let i = 0; i < ship.getLength(); i++) {
-                if (this.board[y][x + i] !== null) {
+                if (this.board[x][y + i] !== null) {
                     throw new Error("Cannot place ship where another ship exists");
                 }
             }
             
             // Place the ship
             for (let i = 0; i < ship.getLength(); i++) {
-                this.board[y][x + i] = ship;
+                this.board[x][y + i] = ship;
             }
         } else if (orientation === "vertical") {
             if (y + ship.getLength() > this.size) {
@@ -37,14 +37,14 @@ export default class Gameboard {
             
             // Check for existing ships
             for (let i = 0; i < ship.getLength(); i++) {
-                if (this.board[y + i][x] !== null) {
+                if (this.board[x + i][y] !== null) {
                     throw new Error("Cannot place ship where another ship exists");
                 }
             }
             
             // Place the ship
             for (let i = 0; i < ship.getLength(); i++) {
-                this.board[y + i][x] = ship;
+                this.board[x + i][y] = ship;
             }
         }
         this.ships.push(ship);
@@ -84,7 +84,7 @@ export default class Gameboard {
     }
 }
 
-module.exports = Gameboard;
+// module.exports = Gameboard;
 
 
 // const board = new Gameboard();
