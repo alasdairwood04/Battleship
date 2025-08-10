@@ -21,7 +21,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const shipPlacementContainer = document.getElementById("ship-placement-container");
 
     // initial board rendering
-    updateBoards(humanPlayer.getGameboard().getBoard(), computerPlayer.getGameboard().getBoard());
+    updateBoards(humanPlayer.getGameboard().getBoard(), 
+                computerPlayer.getGameboard().getBoard()
+                );
 
     // ship placement logic for human player
     const ships = [
@@ -56,7 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 // If all ships are placed, start the game
                 if (currentShipIndex === ships.length) {
                     startButton.disabled = false;
-                    gameController.startGame();
+                    // gameController.startGame();
                 }
             } catch(error) {
                 updateGameStatus(error.message);
@@ -82,23 +84,33 @@ document.addEventListener("DOMContentLoaded", () => {
     computerBoardElement.addEventListener("click", (event) => {
         if (gameController.gamePhase === "play" && gameController.currentPlayer === humanPlayer) {
             handleCellClick(event, gameController);
-            
 
+            if (gameController.getIsOver()) {
+                updateGameStatus(`Game Over! ${gameController.winner.getName()} wins!`);
+                resetButton.style.display = 'block';
+            }
+
+            // Computer player's turn
             if (gameController.gamePhase === "play" && gameController.currentPlayer === computerPlayer) {
                 setTimeout(() => {
                     const result = gameController.playTurn();
-                    const { x, y } = result.coordinates;
+
+                    const [x, y] = result.coordinates; 
+
                     const cell = playerBoardElement.querySelector(`[data-x="${x}"][data-y="${y}"]`);
+
+                    // Now 'cell' will be a valid DOM element
                     if (result.hit) {
                         cell.classList.add('hit');
                     } else {
                         cell.classList.add('miss');
                     }
+
                     if (gameController.getIsOver()) {
                         updateGameStatus(`Game Over! ${gameController.winner.getName()} wins!`);
                         resetButton.style.display = 'block';
                     }
-                }, 1000); // Add a small delay for computer's move
+                }, 500);
             }
         }
     });
@@ -107,6 +119,18 @@ document.addEventListener("DOMContentLoaded", () => {
     // reset game logic
     resetButton.addEventListener("click", () => {
         gameController.resetGame();
+        
+        // Reset ship placement state
+        currentShipIndex = 0;
+        currentOrientation = "horizontal";
+        
+        // Reset player ships
+        for (let i = 0; i < ships.length; i++) {
+            ships[i] = new Ship(ships[i].getName(), ships[i].getLength());
+        }
+        
+        // Reset UI elements
+        startButton.disabled = true;
         updateBoards(
             humanPlayer.getGameboard().getBoard(),
             computerPlayer.getGameboard().getBoard()

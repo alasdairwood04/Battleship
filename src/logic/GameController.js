@@ -17,22 +17,15 @@ export default class GameController {
     switchPlayer() {
         if (this.currentPlayer === this.player1) {
             this.currentPlayer = this.player2;
+            this.opponent = this.player1;
         } else {
             this.currentPlayer = this.player1;
+            this.opponent = this.player2;
         }
         return this.currentPlayer;
     }
 
     setupGameComputer(computerPlayer) {
-    // Place ships for the human player based on provided placements
-    // for (const placement of humanShipPlacements) {
-    //     humanPlayer.placeShip(
-    //         placement.ship, 
-    //         placement.coordinates, 
-    //         placement.orientation
-    //     );
-    // }
-    
     // Place ships for the computer player randomly
     const ships = [
         new Ship("destroyer", 2),
@@ -52,7 +45,7 @@ export default class GameController {
         if (this.gamePhase !== "play") {
             throw new Error("Game is not in play phase");
         }
-        
+
         // Implement the logic for a player's turn
         if (this.isOver) {
             return {
@@ -67,6 +60,8 @@ export default class GameController {
         // handle computer player's turn
         if (this.currentPlayer instanceof ComputerPlayer) {
             attackCoordinates = this.currentPlayer.getAttackCoordinates();
+            console.log(`Computer attacking at coordinates: ${attackCoordinates}`);
+            console.log(`Computer attacking at board: ${this.opponent.getName()}`);
             attackResult = this.currentPlayer.attack(this.opponent.getGameboard(), attackCoordinates);
 
             if (this.opponent.getGameboard().areAllShipsSunk()) {

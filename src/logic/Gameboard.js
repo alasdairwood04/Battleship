@@ -12,39 +12,37 @@ export default class Gameboard {
     }
 
     placeShip(ship, coordinates, orientation) {
-        const [x, y] = coordinates; // [x, y]
+        const [x, y] = coordinates; // x is column, y is row
         
         if (orientation === "horizontal") {
+            // Check boundary along the x-axis (columns)
             if (x + ship.getLength() > this.size) {
                 throw new Error("Ship placement out of bounds horizontally");
             }
             
-            // Check if any position is already occupied
             for (let i = 0; i < ship.getLength(); i++) {
-                if (this.board[x][y + i] !== null) {
+                if (this.board[y][x + i] !== null) { // Access board[row][col]
                     throw new Error("Cannot place ship where another ship exists");
                 }
             }
             
-            // Place the ship
             for (let i = 0; i < ship.getLength(); i++) {
-                this.board[x][y + i] = ship;
+                this.board[y][x + i] = ship; // Access board[row][col]
             }
         } else if (orientation === "vertical") {
+            // Check boundary along the y-axis (rows)
             if (y + ship.getLength() > this.size) {
                 throw new Error("Ship placement out of bounds vertically");
             }
             
-            // Check for existing ships
             for (let i = 0; i < ship.getLength(); i++) {
-                if (this.board[x + i][y] !== null) {
+                if (this.board[y + i][x] !== null) { // Access board[row][col]
                     throw new Error("Cannot place ship where another ship exists");
                 }
             }
             
-            // Place the ship
             for (let i = 0; i < ship.getLength(); i++) {
-                this.board[x + i][y] = ship;
+                this.board[y + i][x] = ship; // Access board[row][col]
             }
         }
         this.ships.push(ship);
@@ -52,8 +50,8 @@ export default class Gameboard {
     }
 
     receiveAttack(coordinates) {
-        const [x, y] = coordinates; // [x, y]
-        const target = this.board[x][y];
+        const [x, y] = coordinates; // x is column, y is row
+        const target = this.board[y][x]; // Access board[row][col]
         if (target) {
             target.hit();
             this.logOfHits.push(coordinates);

@@ -1,23 +1,22 @@
 function renderBoard(boardElement, boardData) {
     boardElement.innerHTML = '';
-    for (let i = 0; i < boardData.length; i++) {
-        for (let j = 0; j < boardData[i].length; j++) {
-            // 'cell' is DECLARED here
+    for (let i = 0; i < boardData.length; i++) {       // i is the row (y-axis)
+        for (let j = 0; j < boardData[i].length; j++) { // j is the column (x-axis)
             const cell = document.createElement('div');
             
-            // 'cell' is USED here
             cell.classList.add('cell');
-            cell.dataset.x = i;
-            cell.dataset.y = j;
+            cell.dataset.x = j; // x is the column
+            cell.dataset.y = i; // y is the row
+
             if (boardData[i][j]) {
                 cell.classList.add('ship');
             }
             
-            // 'cell' is USED again here
             boardElement.appendChild(cell);
         }
     }
 }
+
 function updateBoards(playerBoardData, computerBoardData) {
     const playerBoardElement = document.getElementById("player-board");
     const computerBoardElement = document.getElementById("computer-board");
@@ -41,13 +40,12 @@ function handleCellClick(event, gameController) {
         } else {
             cell.classList.add('miss');
         }
+        
+        return result;
     }
-    if (gameController.getIsOver()) {
-        updateGameStatus(`Game Over! ${gameController.winner.getName()} wins!`);
-        resetButton.style.display = 'block';
-
-    }
+    return null;
 }
+
 
 export {
     renderBoard,
