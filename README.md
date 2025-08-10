@@ -4,36 +4,27 @@
 
 This is a JavaScript implementation of the classic Battleship game, designed to be played in a web browser. The project follows object-oriented programming principles with clean separation of game logic from the user interface.
 
-### Current State
+## Features
 
-The project is currently in development with the core game logic implemented. The codebase includes:
-
-- Ship class for creating and managing ships
-- Gameboard class for handling the game board logic
-- Player classes (Human and Computer) for player interactions
-- GameController to manage the game state and turns
-- Comprehensive test suites for all components
-
-Implemented Features
+### Completed Features
 
 - Ship creation with hit tracking and sinking status
 - Gameboard with ship placement and attack tracking
--Support for both horizontal and vertical ship placement
+- Support for both horizontal and vertical ship placement
 - Attack system with hit/miss recording
 - Player turn management
 - Computer player with random move selection
--Random ship placement for computer players
+- Random ship placement for computer players
 - Win/loss detection
 - Game phase management (setup, play, game over)
 - Game reset functionality
-
-In Progress
-
-- User interface components
+- User interface with visual game boards
 - Ship placement interface for human players
-- Visual representation of game boards
-- Hit/miss display
-- Game status indicators
+- Visual indicators for hits and misses
+- Game status updates
+- Rotate button for ship orientation during placement
+- Start and reset game buttons
+- Turn-based gameplay with computer AI
 
 ### Project Structure
 
@@ -51,49 +42,72 @@ Battleship/
 │   │       ├── Player.test.js
 │   │       └── GameController.test.js
 │   ├── index.js            # Main entry point
-│   └── ui/                 # UI components (in development)
+│   └── ui/                 # UI components
+│        └── ui.js          # UI rendering and event handling
 ├── dist/                   # Production build files
 ├── webpack.dev.js          # Webpack development configuration
 ├── webpack.prod.js         # Webpack production configuration
-└── package.json            # Project dependencies and scripts```
+└── package.json            # Project dependencies and scripts
 ```
 
 ### Key Classes
 
-Ship
+## Key Classes
 
+### Ship
 - Properties: name, length, hits, sunk status
 - Methods: hit(), isSunk(), getName(), getLength(), getHits()
 
-Gameboard
-
+### Gameboard
 - Properties: ships array, board grid, hit/miss logs
 - Methods: placeShip(), receiveAttack(), areAllShipsSunk()
 
-Player
-
+### Player
 - Base class for all player types
 - Methods: attack(), getName(), getGameboard()
 
-HumanPlayer
-
+### HumanPlayer
 - Extends Player
-- Methods: chooseMove(x, y) for human input
+- Methods: placeShip() for manual ship placement
 
-ComputerPlayer
-
+### ComputerPlayer
 - Extends Player
-- Methods: generateAllMoves(), getAttackCoordinates(), attack(), placeShipsRandomly
+- Methods: generateAllMoves(), getAttackCoordinates(), attack(), placeShipsRandomly()
 
-GameController
-
+### GameController
 - Manages game state and player turns
-- Methods: setupGame(), playTurn(), switchPlayer(), resetGame()
+- Methods: setupGameComputer(), playTurn(), switchPlayer(), resetGame()
 - Tracks game phases (setup, play, gameOver)
 
-### How to Run
+## Game Flow
 
-Development
+1. **Setup Phase**
+   - Player places ships on their board by clicking cells
+   - Ships can be rotated between horizontal and vertical orientation
+   - Computer ships are placed randomly
+
+2. **Play Phase**
+   - Player attacks computer's board by clicking on cells
+   - Hits and misses are visually displayed
+   - Computer automatically makes its move after the player
+   - Turn alternates between player and computer
+
+3. **Game Over**
+   - Game ends when all ships of either player are sunk
+   - Winner is announced
+   - Game can be reset to play again
+
+## UI Components
+
+- Two game boards (player's and computer's)
+- Ship placement interface with rotation button
+- Game status display
+- Start button to begin the game
+- Reset button to start over
+
+## How to Run
+
+### Development
 
 ```npm run dev```
 
@@ -105,18 +119,19 @@ Run Tests
 
 ```npm test```
 
-Next Steps
+## Future Enhancements
 
-1. Implement the user interface components
-2. Create visual representation of game boards
-3. Add drag-and-drop ship placement for human players
-4. Develop visual indicators for hits, misses, and sunk ships
-5. Add sound effects and animations
-6. Improve computer AI with targeting logic after hits
+1. Improve computer AI with targeting logic after hits
+2. Add drag-and-drop ship placement for human players
+3. Add sound effects and animations
+4. Add difficulty levels for computer opponent
+5. Implement multiplayer functionality
+6. Add responsive design for mobile devices
+7. hide computers ships
 
-### Technologies Used
+## Technologies Used
 
 - JavaScript (ES6+)
+- HTML5/CSS3
 - Jest for testing
 - Webpack for bundling
-- HTML/CSS (to be implemented for UI)
