@@ -26,9 +26,23 @@
     background-color: grey;
 }
 
+#computer-board .cell.ship {
+    background-color: white;
+}
+
+#computer-board .cell.hit {
+    background-color: red;
+}
+
+#computer-board .cell.miss {
+    background-color: lightblue;
+}
+
+
 .hit {
     background-color: red;
 }
+
 
 .miss {
     background-color: lightblue;
