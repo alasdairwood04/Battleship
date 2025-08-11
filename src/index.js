@@ -166,41 +166,68 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 
-    // play logic
-    computerBoardElement.addEventListener("click", (event) => {
-        if (gameController.gamePhase === "play" && gameController.currentPlayer === humanPlayer) {
-            handleCellClick(event, gameController);
-
-            if (gameController.getIsOver()) {
-                updateGameStatus(`Game Over! ${gameController.winner.getName()} wins!`);
-                resetButton.style.display = 'block';
-            }
-
-            // Computer player's turn
-            if (gameController.gamePhase === "play" && gameController.currentPlayer === computerPlayer) {
-                setTimeout(() => {
-                    const result = gameController.playTurn();
-
-                    const [x, y] = result.coordinates; 
-
-                    const cell = playerBoardElement.querySelector(`[data-x="${x}"][data-y="${y}"]`);
-
-                    // Now 'cell' will be a valid DOM element
-                    if (result.hit) {
-                        cell.classList.add('hit');
-                    } else {
-                        cell.classList.add('miss');
-                    }
-
-                    if (gameController.getIsOver()) {
-                        updateGameStatus(`Game Over! ${gameController.winner.getName()} wins!`);
-                        resetButton.style.display = 'block';
-                    }
-                }, 500);
-            }
+// play logic
+computerBoardElement.addEventListener("click", (event) => {
+    if (gameController.gamePhase === "play" && gameController.currentPlayer === humanPlayer) {
+        const cell = event.target;
+        if (!cell.dataset.x || !cell.dataset.y) {
+            return; // Skip if click wasn't on a cell
         }
-    });
+        
+        const x = parseInt(cell.dataset.x);
+        const y = parseInt(cell.dataset.y);
+        const coordinates = [x, y];
+        
+        // Make the move directly instead of using handleCellClick
+        const result = gameController.playTurn(coordinates);
+        
+        // Check if it was a valid move
+        if (!result.success && result.alreadyAttacked) {
+            updateGameStatus(result.message);
+            return;
+        }
+        
+        // Update the UI based on the result
+        if (result.hit) {
+            cell.classList.add('hit');
+            updateGameStatus("You hit a ship!");
+        } else {
+            cell.classList.add('miss');
+            updateGameStatus("You missed!");
+        }
 
+        if (gameController.getIsOver()) {
+            updateGameStatus(`Game Over! ${gameController.winner.getName()} wins!`);
+            resetButton.style.display = 'block';
+            return;
+        }
+
+        // Computer player's turn
+        if (gameController.gamePhase === "play" && gameController.currentPlayer === computerPlayer) {
+            updateGameStatus("Computer is thinking...");
+            
+            setTimeout(() => {
+                const result = gameController.playTurn();
+                const [x, y] = result.coordinates;
+                const cell = playerBoardElement.querySelector(`[data-x="${x}"][data-y="${y}"]`);
+
+                // Update UI based on computer's move
+                if (result.hit) {
+                    cell.classList.add('hit');
+                    updateGameStatus("Computer hit your ship!");
+                } else {
+                    cell.classList.add('miss');
+                    updateGameStatus("Computer missed! Your turn.");
+                }
+
+                if (gameController.getIsOver()) {
+                    updateGameStatus(`Game Over! ${gameController.winner.getName()} wins!`);
+                    resetButton.style.display = 'block';
+                }
+            }, 1500);
+        }
+    }
+});
 
     // reset game logic
     resetButton.addEventListener("click", () => {

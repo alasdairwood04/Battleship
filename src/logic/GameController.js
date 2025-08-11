@@ -42,6 +42,9 @@ export default class GameController {
 }
 
     playTurn(coordinates = null) {
+        let sunkenComputerShips = new Set();
+        let sunkenPlayerShips = new Set();
+
         if (this.gamePhase !== "play") {
             throw new Error("Game is not in play phase");
         }
@@ -50,6 +53,8 @@ export default class GameController {
         if (this.isOver) {
             return {
                 success: true,
+                sunkenComputerShips: sunkenComputerShips,
+                sunkenPlayerShips: sunkenPlayerShips,
                 message: "Game over"
             }
         }
@@ -63,6 +68,14 @@ export default class GameController {
             console.log(`Computer attacking at coordinates: ${attackCoordinates}`);
             console.log(`Computer attacking at board: ${this.opponent.getName()}`);
             attackResult = this.currentPlayer.attack(this.opponent.getGameboard(), attackCoordinates);
+
+
+            // check if a ship has sunk
+            for (const ship of this.opponent.getGameboard().getShips()) {
+                if (ship.isSunk()) {
+                    sunkenComputerShips.add(ship);
+                }
+            }
 
             if (this.opponent.getGameboard().areAllShipsSunk()) {
                 this.isOver = true;
@@ -78,14 +91,37 @@ export default class GameController {
                 success: true,
                 hit: attackResult,
                 coordinates: attackCoordinates,
+                sunkenComputerShips: sunkenComputerShips,
+                sunkenPlayerShips: sunkenPlayerShips,
                 message: attackResult ? 'Hit!' : 'Miss!'
             };
         }
 
         // Human player's turn
         if (coordinates) {
+
+            if (this.opponent.getGameboard().isAlreadyAttacked(coordinates)) {
+                return {
+                    success: false,
+                    alreadyAttacked: true,
+                    sunkenPlayerShips: sunkenPlayerShips,
+                    sunkenComputerShips: sunkenComputerShips,
+                    message: 'You already attacked this position. Choose another one.'
+                };
+            }
+
             attackResult = this.currentPlayer.attack(this.opponent.getGameboard(), coordinates);
 
+
+            // check if a ship has sunk
+            for (const ship of this.opponent.getGameboard().getShips()) {
+                if (ship.isSunk()) {
+                    sunkenComputerShips.add(ship);
+                }
+            }
+
+
+            // Check if the opponent's ships are sunk
             if (this.opponent.getGameboard().areAllShipsSunk()) {
                 this.isOver = true;
                 this.winner = this.currentPlayer;
@@ -101,12 +137,16 @@ export default class GameController {
                 success: true,
                 hit: attackResult,
                 coordinates: coordinates,
+                sunkenComputerShips: sunkenComputerShips,
+                sunkenPlayerShips: sunkenPlayerShips,
                 message: attackResult ? 'Hit!' : 'Miss!'
             };
         }
         // If no coordinates are provided, it's an invalid turn
         return {
             success: false,
+            sunkenComputerShips: sunkenComputerShips,
+            sunkenPlayerShips: sunkenPlayerShips,
             message: 'Invalid turn'
         };
     }

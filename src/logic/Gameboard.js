@@ -61,6 +61,14 @@ export default class Gameboard {
         return false;
     }
 
+    isAlreadyAttacked(coordinates) {
+        const [x, y] = coordinates;
+            // Check if coordinates exist in either hits or misses logs
+        return this.logOfHits.some(([hitX, hitY]) => hitX === x && hitY === y) || 
+               this.logOfMisses.some(([missX, missY]) => missX === x && missY === y);
+
+    }
+
     getHits() {
         return this.logOfHits;
     }
@@ -71,6 +79,10 @@ export default class Gameboard {
 
     getBoard() {
         return this.board;
+    }
+
+    getShips() {
+        return this.ships;
     }
 
     areAllShipsSunk() {
