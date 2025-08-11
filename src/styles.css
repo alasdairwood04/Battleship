@@ -1,3 +1,43 @@
+:root {
+  line-height: 1.5;
+}
+
+h1, h2, h3, h4, h5, figure, p, ol, ul {
+  margin: 0;
+}
+
+ol[role="list"], ul[role="list"] {
+  list-style: none;
+  padding-inline: 0;
+}
+
+h1, h2, h3, h4, h5 {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+img {
+  display: block;
+  max-inline-size: 100%;
+}
+
+
+/* HTML and Body styles (global defaults) */
+
+
+/* HTML and Body styles (global defaults) */
+
+html {
+    font-size: 16px; /* Base font size for rem units */
+    scroll-behavior: smooth; /* Optional: smooth scrolling for anchor links */
+}
+
+body {
+    font-family: "Roboto", Arial, sans-serif; /* Fallback fonts */
+    font-size: 1rem; /* Inherit from html */
+    /* background-color: hsla(208, 100%, 97%, 0.757); */
+}
+
 .game-board {
     display: grid;
     grid-template-columns: repeat(10, 30px);
@@ -46,4 +86,95 @@
 
 .miss {
     background-color: lightblue;
+}
+
+.ship-item {
+    padding: 8px 12px;
+    margin: 5px 0;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #f0f0f0;
+    transition: all 0.2s ease;
+}
+
+.ship-item:hover {
+    background-color: #e0e0e0;
+}
+
+.ship-item.selected {
+    background-color: #4CAF50;
+    color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.ship-item.placed {
+    background-color: #9E9E9E;
+    color: #f0f0f0;
+    cursor: not-allowed;
+    text-decoration: line-through;
+}
+
+.ship-instructions {
+    margin-top: 15px;
+    font-style: italic;
+    color: #555;
+}
+
+
+/* header styling */
+
+header {
+    background-color: #afe7f6c2;
+    font-size: 2rem;
+    padding: 12px 16px;
+    text-align: center;
+    margin-bottom: 0.5rem;;
+}
+
+/* set-up-container styling */
+
+#setup-container {
+    display: block;
+}
+
+.ship-placement-container {
+    margin-bottom: 20px;
+}
+
+.ship-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 1rem;
+}
+
+.ship-controls #rotate-button {
+    align-items: center;
+    
+}
+
+#setup-container #player-board {
+    justify-content: center;
+
+}
+
+
+.ship-placement-and-human-board {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.ship-selection-list {
+    width: 400px;
+    height: auto;
+}
+
+.game-status-container {
+    width: 100%;
+    padding: 1rem;
+    background-color: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    margin-top: 1rem;
 }

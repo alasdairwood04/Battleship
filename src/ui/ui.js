@@ -24,6 +24,12 @@ function updateBoards(playerBoardData, computerBoardData) {
     renderBoard(computerBoardElement, computerBoardData);
 }
 
+function updateBoard(playerBoardData) {
+    const playerBoardElement = document.getElementById("player-board");
+    renderBoard(playerBoardElement, playerBoardData);
+}
+
+
 function updateGameStatus(message) {
     const statusElement = document.getElementById("game-status");
     statusElement.textContent = message;
@@ -46,10 +52,20 @@ function handleCellClick(event, gameController) {
     return null;
 }
 
+function updateShipInfoDisplay(ship) {
+    const shipInfoElement = document.getElementById("ship-info");
+    shipInfoElement.textContent = `Selected Ship: ${ship.getName()} (Length: ${ship.getLength()})`;
+}
+
+
+
+
+
 
 export {
     renderBoard,
     updateBoards,
     updateGameStatus,
-    handleCellClick
+    handleCellClick,
+    updateShipInfoDisplay,
 };
