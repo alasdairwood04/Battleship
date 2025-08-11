@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const rotateButton = document.getElementById("rotate-button");
     const resetButton = document.getElementById("reset-button");
     const setUpContainer = document.getElementById("setup-container");
-    const gameContainer = document.querySelector(".game-container");
+    const gameContainer = document.querySelector("#game-container");
     const gameBoardHuman = document.getElementById("game-board-container-human");
     const gameBoardComputer = document.getElementById("game-board-container-computer");
     const shipPlacementHumanBoard = document.querySelector(".ship-placement-and-human-board");
@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
     playerBoardElement.classList.add("game-board");
 
     // start with hiding game-container
-    gameContainer.style.display = "none";
+    // gameContainer.style.display = "none";
 
             
     // adding player board to setup-container
@@ -42,7 +42,10 @@ document.addEventListener("DOMContentLoaded", () => {
     //         );
 
 
-        // ship placement logic for human player
+
+// ================================= Ship Placement Logic ========================================
+
+    // ship placement logic for human player
     const ships = [
         new Ship("destroyer", 2),
         new Ship("submarine", 3),
@@ -85,6 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             shipSelectionList.appendChild(shipItem);
         });
+
          // Add instruction text
         const instructionElement = document.createElement("p");
         instructionElement.className = "ship-instructions";
@@ -143,14 +147,17 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    // ================================= Ship Placement Logic ========================================
+
+
     // ship placement for computer player and start game
     startButton.addEventListener("click", () => {
         if (gameController.gamePhase === "setup" && placedShips.size === ships.length) {
             gameController.setupGameComputer(computerPlayer);
             
             // Switch from setup to game view
-            setUpContainer.style.display = "none";
-            gameContainer.style.display = "block";
+            setUpContainer.classList.add("hidden");
+            gameContainer.classList.remove("hidden");
 
 
             // Move player board from setup to game container if needed
@@ -166,7 +173,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 
-// play logic
+
+// ================================= Game Logic ========================================
 computerBoardElement.addEventListener("click", (event) => {
     if (gameController.gamePhase === "play" && gameController.currentPlayer === humanPlayer) {
         const cell = event.target;
@@ -228,8 +236,10 @@ computerBoardElement.addEventListener("click", (event) => {
         }
     }
 });
+// ================================= Game Logic ========================================
 
-    // reset game logic
+
+// ================================= Reset Game Logic ========================================
     resetButton.addEventListener("click", () => {
         gameController.resetGame();
         
@@ -244,21 +254,23 @@ computerBoardElement.addEventListener("click", (event) => {
         }
         
         // Switch back to setup view
-        gameContainer.style.display = "none";
-        setUpContainer.style.display = "block";
+        gameContainer.classList.add("hidden"); // Hide game container
+        // gameInfo.classList.add("hidden"); // Hide game info
+        setUpContainer.classList.remove("hidden"); // Show setup container
         
         // Move player board back to setup container
-        setUpContainer.appendChild(playerBoardElement);
+        shipPlacementHumanBoard.appendChild(playerBoardElement);
         
         // Reset UI elements
         startButton.disabled = true;
-        updateBoards(
-            humanPlayer.getGameboard().getBoard(),
-            computerPlayer.getGameboard().getBoard()
-        );
+        
+        // Re-render player board
+        renderBoard(playerBoardElement, humanPlayer.getGameboard().getBoard());
         
         updateShipSelectionList();
         updateGameStatus("Game reset. Select a ship to place.");
-        // resetButton.style.display = 'none';
     });
+
+    // ================================= Reset Game Logic ========================================
+
 });
