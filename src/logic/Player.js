@@ -98,35 +98,3 @@ export class ComputerPlayer extends Player {
 }
 
 // module.exports = { Player, HumanPlayer, ComputerPlayer };
-
-// const player = new HumanPlayer("Player1");
-
-// const ship = new Ship("Battleship", 4);
-// player.placeShip(ship, [0, 0], "horizontal");
-
-
-// const computer = new ComputerPlayer();
-
-// computer.makeRandomAttack(player.getGameboard());
-
-// console.log(player.getGameboard().getBoard());
-
-// console.log("Hits:", player.getGameboard().getHits());
-
-// console.log("Misses:", player.getGameboard().getMisses());
-
-// const player1 = new HumanPlayer("Player1");
-// const computer = new ComputerPlayer();
-// const ship = new Ship("Battleship", 4);
-// player1.placeShip(ship, [0, 0], "horizontal");
-
-
-
-// computer.attack(player1.getGameboard());
-
-// console.log(player1.getGameboard().getBoard());
-
-
-// console.log("Hits:", player1.getGameboard().getHits());
-
-// console.log("Misses:", player1.getGameboard().getMisses());

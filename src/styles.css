@@ -287,3 +287,10 @@ button:disabled {
   opacity: 1;
   top: 40px;
 }
+
+
+#game-info {
+  display: flex;
+  justify-content: space-around;
+
+}

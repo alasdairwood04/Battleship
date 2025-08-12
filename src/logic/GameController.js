@@ -73,7 +73,7 @@ export default class GameController {
             // check if a ship has sunk
             for (const ship of this.opponent.getGameboard().getShips()) {
                 if (ship.isSunk()) {
-                    sunkenComputerShips.add(ship);
+                    sunkenPlayerShips.add(ship);
                 }
             }
 
@@ -178,29 +178,3 @@ export default class GameController {
         return this.isOver;
     }
 }
-
-// module.exports = GameController;
-
-// // Setup players
-// const humanPlayer = new HumanPlayer("Human");
-// const computerPlayer = new ComputerPlayer();
-
-// // Create ships
-// const humanShip = new Ship("destroyer", 2);
-// const computerShip = new Ship("destroyer", 2);
-
-// // Place ships
-// humanPlayer.placeShip(humanShip, [0, 0], "horizontal");
-// computerPlayer.placeShip(computerShip, [0, 0], "horizontal");
-
-
-// console.log(humanPlayer.getGameboard().getBoard());
-
-// // Create controller and set to play phase
-// const controller = new GameController(humanPlayer, computerPlayer);
-// controller.gamePhase = "play";
-// controller.currentPlayer = computerPlayer;
-// controller.opponent = humanPlayer;
-
-// const computerMoveResult = controller.playTurn([0, 0]);
-// console.log(computerMoveResult);

@@ -57,10 +57,24 @@ function updateShipInfoDisplay(ship) {
     shipInfoElement.textContent = `Selected Ship: ${ship.getName()} (Length: ${ship.getLength()})`;
 }
 
+function updateSunkShips(sunkShips, listElement) {
+    listElement.innerHTML = ''; // Clear the list
+    sunkShips.forEach(ship => {
+        const shipElement = document.createElement('li');
+        shipElement.textContent = ship.getName();
+        listElement.appendChild(shipElement);
+    });
+}
 
-
-
-
+function updateNotification(message) {
+    notification.textContent = message;
+    notification.classList.remove("hidden");
+    notification.classList.add("show");
+    setTimeout(() => {
+        notification.classList.remove("show");
+        notification.classList.add("hidden");
+    }, 2000);
+}
 
 export {
     renderBoard,
@@ -68,4 +82,6 @@ export {
     updateGameStatus,
     handleCellClick,
     updateShipInfoDisplay,
+    updateSunkShips,
+    updateNotification
 };
