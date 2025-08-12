@@ -49,7 +49,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // ================================= Ship Placement Logic ========================================
 
-    // ship placement logic for human player
     const ships = [
         new Ship("destroyer", 2),
         new Ship("submarine", 3),
@@ -60,9 +59,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const shipSelectionList = document.querySelector(".ship-selection-list");
 
-    let currentShipIndex = null;
     let currentOrientation = "horizontal";
     const placedShips = new Set();
+
+    // Helper function to create the custom drag image
+    function createDragImage(ship, orientation) {
+        const container = document.createElement('div');
+        container.classList.add('drag-image-container');
+        container.style.flexDirection = orientation === 'horizontal' ? 'row' : 'column';
+
+        for (let i = 0; i < ship.getLength(); i++) {
+            const cell = document.createElement('div');
+            // Use existing cell and ship styles for a consistent look
+            cell.classList.add('cell', 'ship');
+            container.appendChild(cell);
+        }
+
+        document.body.appendChild(container);
+        return container;
+    }
 
     function updateShipSelectionList() {
         shipSelectionList.innerHTML = '<h3>Place your ships:</h3>';
@@ -71,43 +86,54 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (placedShips.has(index)) {
                 shipItem.classList.add("placed");
-            } else if (currentShipIndex === index) {
-                shipItem.classList.add("selected");
             } else {
                 shipItem.classList.add("ship-item");
+                shipItem.draggable = true;
             }
 
             shipItem.textContent = `${ship.getName()} (${ship.getLength()} cells)`;
             shipItem.dataset.index = index;
 
-            if (!placedShips.has(index)) {
-                shipItem.addEventListener("click", () => {
-                    if (currentShipIndex !== index) {
-                        currentShipIndex = index;
-                        // updateShipInfoDisplay(ship);
-                        updateShipSelectionList();
-                    }
-                });
-            }
+            // Add drag event listeners
+            shipItem.addEventListener("dragstart", (event) => {
+                event.dataTransfer.setData("text/plain", index);
+                
+                // Create and set the custom drag image
+                const draggedShip = ships[index];
+                const dragImage = createDragImage(draggedShip, currentOrientation);
+                
+                // Set the custom drag image. The offset centers the cursor on the first cell.
+                event.dataTransfer.setDragImage(dragImage, 17, 17);
+
+                // Use a short timeout to apply the 'dragging' class, allowing the browser
+                // to capture the original element's appearance before it changes.
+                setTimeout(() => {
+                    shipItem.classList.add("dragging");
+                }, 0);
+                
+                // Clean up the custom drag image from the DOM after the browser has captured it.
+                setTimeout(() => {
+                    document.body.removeChild(dragImage);
+                }, 0);
+            });
+
+            shipItem.addEventListener("dragend", () => {
+                shipItem.classList.remove("dragging");
+            });
 
             shipSelectionList.appendChild(shipItem);
         });
 
-         // Add instruction text
         const instructionElement = document.createElement("p");
         instructionElement.className = "ship-instructions";
         
-        if (currentShipIndex !== null) {
-            const selectedShip = ships[currentShipIndex];
-            instructionElement.textContent = `${currentOrientation} orientation. Use the rotate button to change orientation.`;
-        } else if (placedShips.size === ships.length) {
+        if (placedShips.size === ships.length) {
             instructionElement.textContent = "All ships placed. Click 'Start Game' to begin!";
         } else {
-            instructionElement.textContent = "Select a ship from the list above to place it.";
+            instructionElement.textContent = "Drag and drop ships onto your board. Use the rotate button to change orientation.";
         }
         
         shipSelectionList.appendChild(instructionElement);
-
     }
 
     updateShipSelectionList();
@@ -116,38 +142,50 @@ document.addEventListener("DOMContentLoaded", () => {
         currentOrientation = currentOrientation === "horizontal" ? "vertical" : "horizontal";
     });
 
-    playerBoardElement.addEventListener("click", (event) => {
-        if (gameController.gamePhase === "setup" && currentShipIndex !== null && !placedShips.has(currentShipIndex)) {
-            const cell = event.target;
-            const x = parseInt(cell.dataset.x);
-            const y = parseInt(cell.dataset.y);
-            const currentShip = ships[currentShipIndex];
+    playerBoardElement.addEventListener("dragover", (event) => {
+        event.preventDefault();
+        const cell = event.target;
+        if (cell.classList.contains("cell")) {
+            cell.classList.add("drag-over");
+        }
+    });
 
-            try {
-                humanPlayer.placeShip(currentShip, [x, y], currentOrientation);
-                updateBoards(
-                    humanPlayer.getGameboard().getBoard(),
-                    computerPlayer.getGameboard().getBoard()
-                );
+    playerBoardElement.addEventListener("dragleave", (event) => {
+        const cell = event.target;
+        if (cell.classList.contains("cell")) {
+            cell.classList.remove("drag-over");
+        }
+    });
 
-                placedShips.add(currentShipIndex);
+    playerBoardElement.addEventListener("drop", (event) => {
+        event.preventDefault();
+        const cell = event.target;
+        if (cell.classList.contains("cell")) {
+            cell.classList.remove("drag-over");
+        }
+        
+        const shipIndex = parseInt(event.dataTransfer.getData("text/plain"), 10);
+        if (isNaN(shipIndex) || placedShips.has(shipIndex)) {
+            return;
+        }
 
-                currentShipIndex = null;
-                updateGameStatus(`${currentShip.getName()} placed successfully. Select another ship.`);
+        const x = parseInt(cell.dataset.x, 10);
+        const y = parseInt(cell.dataset.y, 10);
+        const currentShip = ships[shipIndex];
 
+        try {
+            humanPlayer.placeShip(currentShip, [x, y], currentOrientation);
+            updateBoards(humanPlayer.getGameboard().getBoard(), computerPlayer.getGameboard().getBoard());
+            placedShips.add(shipIndex);
+            updateShipSelectionList();
+            updateGameStatus(`${currentShip.getName()} placed successfully.`);
 
-                // If all ships are placed, start the game
-                if (placedShips.size === ships.length) {
-                    startButton.disabled = false;
-                    updateGameStatus("All ships placed. Click 'Start Game' to begin!");
-                }
-
-                updateShipSelectionList();
-            } catch(error) {
-                updateGameStatus(error.message);
+            if (placedShips.size === ships.length) {
+                startButton.disabled = false;
+                updateGameStatus("All ships placed. Click 'Start Game' to begin!");
             }
-        } else if (gameController.gamePhase === "setup" && currentShipIndex === null) {
-            updateGameStatus("Please select a ship from the list first.");
+        } catch (error) {
+            updateGameStatus(error.message);
         }
     });
 
@@ -241,7 +279,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (gameController.getIsOver()) {
                 updateGameStatus(`Game Over! ${gameController.winner.getName()} wins!`);
-                resetButton.style.display = 'block';
+                // resetButton.style.display = 'block';
                 return;
             }
 
@@ -298,8 +336,10 @@ document.addEventListener("DOMContentLoaded", () => {
     resetButton.addEventListener("click", () => {
         gameController.resetGame();
         
+        placedShips.clear();
+
         // Reset ship placement state
-        currentShipIndex = null;
+        // currentShipIndex = null;
         currentOrientation = "horizontal";
         placedShips.clear();
         
@@ -313,6 +353,10 @@ document.addEventListener("DOMContentLoaded", () => {
         // gameInfo.classList.add("hidden"); // Hide game info
         setUpContainer.classList.remove("hidden"); // Show setup container
         
+
+        gameInfo.classList.add("hidden"); // Hide game info
+
+
         // Move player board back to setup container
         shipPlacementHumanBoard.appendChild(playerBoardElement);
         

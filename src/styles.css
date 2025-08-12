@@ -149,7 +149,7 @@ header h1 {
     color: var(--color-primary);
 }
 
-.ship-item, .ship-item.selected, .ship-item.placed {
+.ship-item, .ship-item.selected, .ship-selection-list .placed {
     padding: 0.75rem 1rem;
     margin: 0.5rem 0;
     border-radius: 4px;
@@ -173,12 +173,6 @@ header h1 {
     border-color: var(--color-primary);
 }
 
-.ship-item.placed {
-    background-color: #e9ecef;
-    color: #6c757d;
-    cursor: not-allowed;
-    text-decoration: line-through;
-}
 
 .ship-controls {
     margin-bottom: 1.5rem;
@@ -227,7 +221,7 @@ button:disabled {
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
-
+ 
 #game-status {
     font-size: 1.1rem;
     font-style: italic;
@@ -264,7 +258,7 @@ button:disabled {
   font-size: 1.1em;
 }
 
-/* Notification Styling ✨ */
+/* Notification Styling */
 #notification {
   position: fixed;
   top: 20px;
@@ -293,4 +287,32 @@ button:disabled {
   display: flex;
   justify-content: space-around;
 
+}
+
+/* Drag and Drop Styles */
+.ship-item.dragging {
+    opacity: 0.5;
+}
+
+.cell.drag-over {
+    background-color: #a0c4ff; /* A light blue to indicate a valid drop target */
+}
+
+/* Style for the original ship item in the list while it's being dragged */
+.ship-item.dragging {
+    opacity: 0.5;
+}
+
+/* Style for the cells on the board when a ship is dragged over them */
+.cell.drag-over {
+    background-color: #a0c4ff; /* A light blue to indicate a valid drop target */
+}
+
+/* Container for our custom drag preview element */
+.drag-image-container {
+    position: absolute;
+    top: -1000px; /* Position it off-screen so it's not visible in the layout */
+    left: -1000px;
+    display: flex;
+    pointer-events: none; /* Make sure it doesn't interfere with mouse events */
 }
